@@ -1,0 +1,15 @@
+﻿body {
+    background-color: black;
+}
+
+#map {
+    height: 400px;
+    margin-right: 300px;
+}
+
+#controlPanel {
+    display: inline-block;
+    float: right;
+    width: 300px;
+    background-color: white;
+}

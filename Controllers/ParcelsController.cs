@@ -20,7 +20,7 @@ namespace ParcelManager.Controllers
             if (context.Parcels.Count() == 0)
             {
                 //Add test parcel
-                context.Parcels.Add(new Parcel { Id = 0, City = "Warsaw", SendDate = DateTime.Now });
+                context.Parcels.Add(new Parcel { Id = 0, City = "Warsaw", SendDate = DateTime.Now, Latitude = 30, Longitude = 30});
                 context.SaveChanges();
             }
         }
