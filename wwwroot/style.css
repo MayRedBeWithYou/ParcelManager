@@ -3,7 +3,7 @@
 }
 
 #map {
-    height: 400px;
+    height: 600px;
     margin-right: 300px;
 }
 
@@ -11,5 +11,92 @@
     display: inline-block;
     float: right;
     width: 300px;
+    margin-right: 5px;
+    margin-left: 5px;
+    padding: 10px;
+    padding-top: 0;
+    height: 98vh;
+}
+
+.collapsible {
+    background-color: cornflowerblue;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 22px;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+}
+
+.active, .collapsible:hover {
+    background-color: #4d85ea;
+}
+
+.collapsible:after {
+    content: '\23F4';
+    font-size: 18px;
+    color: white;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\23F7";
+}
+
+.menu {
+    border: solid 1px black;
+    margin-bottom: 10px;
+}
+
+.content {
+    padding: 0 18px;
     background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.formRow {
+    display: flex;
+    margin-top: 10px;
+}
+
+.formFieldName {
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    font-size: 0.9em;
+    text-align: right;
+    flex-basis: 100px;
+    margin-right: 12px;
+}
+
+.formFieldInput {
+    display: flex;
+    box-sizing: border-box;
+    width: 80%;
+    font-family: 'Roboto', sans-serif;
+}
+
+.okButton {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    line-height: 20px;
+    padding: 8px;
+    min-width: 120px;
+    border-radius: 5px;
+    border: 1px solid cornflowerblue;
+    background-color: cornflowerblue;
+    color: white;
+    float: right;
+    margin: 12px 0;
+}
+
+.okButton:hover {
+    transition: 0.3s;
+    background-color: #4d85ea;
 }

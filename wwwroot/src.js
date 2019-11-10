@@ -1,6 +1,8 @@
 //https://nominatim.org/release-docs/develop/api/Search/ //format adresu
 window.onload = function init() {
 
+    var parcels = {};
+
     function addNewParcel() {
         console.log("Added new parcel.");
         var parcel = {};
@@ -9,9 +11,19 @@ window.onload = function init() {
         parcel['street'] = document.getElementById("addStreetInput").value;
         parcel['postalcode'] = document.getElementById("addPostalCodeInput").value;
         parcel['description'] = document.getElementById("addDescriptionInput").value;
-        console.log(parcel);
-        fetch("api/parcel/add", { method: 'POST' });
+        var uri = "https://nominatim.openstreetmap.org/?format=json&limit=1&q=" + parcel['street']
+            + "," + parcel['postalcode'] + "," + parcel['city'] + "," + parcel['country'];
+        uri = encodeURI(uri);
+        fetch(uri, { method: 'POST' }).then(resp => {
+            resp.json().then(info => {
+                parcel['latitude'] = info[0]['lat'];
+                parcel['longitude'] = info[0]['lon'];
+                L.marker([parcel['latitude'], parcel['longitude']], { title: parcel['description'] }).addTo(map);
+                parcels.push(parcel);
+            });
+        });
     }
+
 
     var map = L.map('map').setView([51.505, -0.09], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -20,7 +32,21 @@ window.onload = function init() {
         id: 'mapbox.streets',
         accessToken: 'pk.eyJ1IjoiYW5uYTMiLCJhIjoiY2sybjkzMzZqMG55YjNqbjVmdWU0ZmJ3dyJ9.-ohocMLisbsVBa8ozJV_Bw'
     }).addTo(map);
-    var marker = L.marker([51.5, -0.09]).addTo(map); //znacznik
+    L.marker([51.5, -0.09]).addTo(map);
     document.getElementById("addNewParcelButton").addEventListener("click", addNewParcel);
     console.log(document.getElementById("addNewParcelButton"));
+
+    var cl = document.getElementsByClassName("collapsible");
+    for (i = 0; i < cl.length; i++) {
+        cl[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            }
+            else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    }
 }
