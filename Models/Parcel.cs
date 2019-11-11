@@ -21,7 +21,8 @@ namespace ParcelManager.Models
 
         public string Street { get; set; }
 
-        public string ApartmentNumber { get; set; }
+        public string ApartmentNumber { get; set; } //Todo
+        //nie uwzględniamy tego w dodawaniu?? więc albo poprawić w formularzu i js albo wyrzucić
 
         public string PostalCode { get; set; }
 
