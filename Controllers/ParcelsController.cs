@@ -17,23 +17,16 @@ namespace ParcelManager.Controllers
         public ParcelsController(ParcelContext ctx)
         {
             context = ctx;
-
-            if (context.Parcels.Count() == 0)
-            {
-                //Add test parcel
-                context.Parcels.Add(new Parcel { Id = 0, City = "Warsaw", SendDate = DateTime.Now, Latitude = 30, Longitude = 30 });
-                context.SaveChanges();
-            }
         }
 
         [HttpGet]
         public IEnumerable<Parcel> GetParcels()
         {
-            return context.Parcels.AsEnumerable();
+            return context.Parcels.OrderBy(parcel => parcel.SendDate).AsEnumerable();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser([FromRoute] int id)
+        public async Task<IActionResult> GetParcel([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -92,10 +85,12 @@ namespace ParcelManager.Controllers
                 return BadRequest(ModelState);
             }
 
-            context.Parcels.AddRange(parcel);
+            parcel.SendDate = DateTime.Now;
+            context.Parcels.Add(parcel);
+
             await context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = parcel.Id }, parcel);
+            return CreatedAtAction("GetParcel", new { id = parcel.Id }, parcel);
         }
 
         [HttpDelete("{id}")]

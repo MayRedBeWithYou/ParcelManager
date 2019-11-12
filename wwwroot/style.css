@@ -10,12 +10,13 @@
 #controlPanel {
     display: inline-block;
     float: right;
-    width: 300px;
+    width: 500px;
     margin-right: 5px;
     margin-left: 5px;
     padding: 10px;
     padding-top: 0;
     height: 98vh;
+    overflow-y: auto;
 }
 
 .collapsible {
@@ -66,6 +67,37 @@
     margin-top: 10px;
 }
 
+#templateParcel {
+    border: solid 1px black;
+    padding: 0 18px;
+}
+
+.parcelRow {
+    display: flex;
+    margin-top: 10px;
+}
+
+.parcel {
+    border: solid 1px black;
+    padding: 0 18px;
+}
+
+.parcelText {
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    font-size: 0.9em;
+    display: contents;
+}
+
+.parcelInfo {
+    border: solid 1px black;
+    padding: 10px 18px;
+}
+
+#parcelList {
+    padding: 0;
+}
+
 .formFieldName {
     font-family: 'Roboto', sans-serif;
     font-weight: normal;
@@ -99,4 +131,40 @@
 .okButton:hover {
     transition: 0.3s;
     background-color: #4d85ea;
+}
+
+.editButton {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    line-height: 20px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid cornflowerblue;
+    background-color: cornflowerblue;
+    color: white;
+    float: right;
+    margin: 10px;
+}
+
+.editButton:hover {
+    transition: 0.3s;
+    background-color: #4d85ea;
+}
+
+.deleteButton {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    line-height: 20px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid indianred;
+    background-color: indianred;
+    color: white;
+    float: right;
+    margin: 10px 0;
+}
+
+.deleteButton:hover {
+    transition: 0.3s;
+    background-color: firebrick;
 }

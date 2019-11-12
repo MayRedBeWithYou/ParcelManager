@@ -17,8 +17,8 @@
 <body>
     <div id="controlPanel">
         <div class="menu">
-            <button class="collapsible">Add new parcel</button>
-            <form id="addForm" class="content" action="javascript:void(0)" method="post">
+            <button id="addNewParcelToggle" class="collapsible">Add new parcel</button>
+            <form class="content" action="javascript:void(0)">
                 <div class="formRow">
                     <label class="formFieldName">Country</label>
                     <input class="formFieldInput" type="text" id="addCountryInput" />
@@ -39,13 +39,12 @@
                     <label class="formFieldName">Description</label>
                     <input class="formFieldInput" type="text" id="addDescriptionInput" />
                 </div>
-                <button class="okButton" type="submit" form="addForm" id="addNewParcelButton">Add parcel</button>
+                <button class="okButton" id="addNewParcelButton">Add parcel</button>
             </form>
         </div>
         <div class="menu">
-            <button class="collapsible" id="allParcelsButton">All parcels</button>
+            <button class="collapsible" id="allParcelsToggle">All parcels</button>
             <div id="parcelList" class="content">
-
             </div>
         </div>
     </div>
