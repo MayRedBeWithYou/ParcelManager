@@ -51,6 +51,10 @@ window.onload = function init() {
         parcel['postalcode'] = document.getElementById("addPostalCodeInput").value;
         parcel['description'] = document.getElementById("addDescriptionInput").value;
 
+        if (Validate(parcel) == false) {
+            return;
+        }
+       
         var uri = "https://nominatim.openstreetmap.org/?format=json&addressdetails=1&limit=1&q=" + parcel['street']
             + "," + parcel['postalcode'] + "," + parcel['city'] + "," + parcel['country'];
         uri = encodeURI(uri);
@@ -58,6 +62,9 @@ window.onload = function init() {
         fetch(uri, { method: 'POST' }).then(resp => {
             resp.json().then(info => {
                 if (info.length == 0) {
+                    errorLabel.classList.remove("errorInactive");
+                    errorLabel.classList.add("errorActive");
+                    errorLabel.textContent = "Please enter valid address";
                     return;
                 }
                 let address = info[0]['address'];
@@ -85,6 +92,37 @@ window.onload = function init() {
                 }).then(UpdateParcelList);
             });
         });
+    }
+
+    function Validate(parcel) {
+        var errorLabel = document.getElementById("errorLabel");
+        var ret = false;
+        if (parcel['country'] == "") {
+            errorLabel.textContent = "Please enter country";
+            ret = true;
+        }
+        else if (parcel['city'] == "") {
+            errorLabel.textContent = "Please enter city";
+            ret = true;
+        }
+        else if (parcel['street'] == "" ) {
+            errorLabel.textContent = "please enter street";
+            ret = true;
+        }
+        else if (parcel['postalcode'] == "") {
+            errorLabel.textContent = "please enter valid postalcode";
+            ret = true;
+        }
+        if (ret == true) {
+            errorLabel.classList.remove("errorInactive");
+            errorLabel.classList.add("errorActive");
+            return false;
+        }
+        if (errorLabel.classList.contains("errorActive")) {
+            errorLabel.classList.remove("errorActive");
+            errorLabel.classList.add("errorInactive");
+        }
+        return true;
     }
 
     async function UpdateParcelList() {
