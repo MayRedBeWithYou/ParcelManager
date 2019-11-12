@@ -43,7 +43,6 @@ window.onload = function init() {
     UpdateParcelList();
 
     async function addNewParcel() {
-        //document.getElementById("noAddressError").className = "errorInactive";
         console.log("Adding new parcel.");
         let parcel = {};
         parcel['country'] = document.getElementById("addCountryInput").value;
@@ -59,12 +58,16 @@ window.onload = function init() {
         fetch(uri, { method: 'POST' }).then(resp => {
             resp.json().then(info => {
                 if (info.length == 0) {
-                    //document.getElementById("noAddressError").className = "errorActive";
                     return;
                 }
                 let address = info[0]['address'];
                 parcel['country'] = address['country'];
-                parcel['city'] = address['city'];
+                if (address['city']) {
+                    parcel['city'] = address['city'];
+                }
+                else if (address['town']) {
+                    parcel['city'] = address['town'];
+                }
                 parcel['street'] = address['road'];
                 if (address['house_number']) {
                     parcel['street'] += " " + address['house_number'];
