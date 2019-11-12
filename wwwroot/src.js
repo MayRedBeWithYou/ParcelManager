@@ -52,7 +52,7 @@ window.onload = function init() {
         parcel['postalcode'] = document.getElementById("addPostalCodeInput").value;
         parcel['description'] = document.getElementById("addDescriptionInput").value;
 
-        var uri = "https://nominatim.openstreetmap.org/?format=json&limit=1&q=" + parcel['street']
+        var uri = "https://nominatim.openstreetmap.org/?format=json&addressdetails=1&limit=1&q=" + parcel['street']
             + "," + parcel['postalcode'] + "," + parcel['city'] + "," + parcel['country'];
         uri = encodeURI(uri);
 
@@ -62,9 +62,17 @@ window.onload = function init() {
                     //document.getElementById("noAddressError").className = "errorActive";
                     return;
                 }
+                let address = info[0]['address'];
+                parcel['country'] = address['country'];
+                parcel['city'] = address['city'];
+                parcel['street'] = address['road'];
+                if (address['house_number']) {
+                    parcel['street'] += " " + address['house_number'];
+                }
+                parcel['postalcode'] = address['postcode'];
                 parcel['latitude'] = info[0]['lat'];
                 parcel['longitude'] = info[0]['lon'];
-
+                console.log(info);
                 fetch('api/Parcels', {
                     method: 'POST',
                     body: JSON.stringify(parcel),
