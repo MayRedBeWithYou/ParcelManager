@@ -87,7 +87,8 @@
     font-family: 'Roboto', sans-serif;
     font-weight: normal;
     font-size: 0.9em;
-    display: contents;
+    display: block;
+    margin: 5px 0;
 }
 
 .parcelInfo {

@@ -48,9 +48,9 @@ window.onload = function init() {
         parcel['city'] = document.getElementById("addCityInput").value;
         parcel['street'] = document.getElementById("addStreetInput").value;
         parcel['postalCode'] = document.getElementById("addPostalCodeInput").value;
-        parcel['description'] = document.getElementById("addDescriptionInput").value;
+        parcel['dimensions'] = document.getElementById("addDimensionsInput").value;
 
-        if (Validate(parcel) == false) {
+        if (Validate(parcel, false) == false) {
             return;
         }
 
@@ -98,7 +98,7 @@ window.onload = function init() {
         if (isEdit) {
             errorLabel = document.getElementById("editErrorLabel");
         }
-
+        let reg = new RegExp('^[1-9]+[0-9]*x[1-9]+[0-9]*x[1-9]+[0-9]*$');
         let error = false;
         if (parcel['country'] == "") {
             errorLabel.textContent = "Please enter valid country";
@@ -113,7 +113,11 @@ window.onload = function init() {
             error = true;
         }
         else if (parcel['postalcode'] == "") {
-            errorLabel.textContent = "Please enter valid postalcode";
+            errorLabel.textContent = "Please enter valid postal code";
+            error = true;
+        }
+        else if (!reg.test(parcel['dimensions'])) {
+            errorLabel.textContent = "Please enter valid dimensions";
             error = true;
         }
         if (error) {
@@ -156,7 +160,7 @@ window.onload = function init() {
 
                 for (i = 0; i < parcels.length; i++) {
                     let parcel = parcels[i];
-                    parcel['marker'] = L.marker([parcel['latitude'], parcel['longitude']], { title: parcel['description'] });
+                    parcel['marker'] = L.marker([parcel['latitude'], parcel['longitude']], { title: parcel['dimensions'] });
                     parcel['marker'].addTo(map);
                     let parcelDiv = document.createElement("div");
                     parcelDiv.className = "parcel";
@@ -182,27 +186,23 @@ window.onload = function init() {
                         StartEdit(parcel);
                     });
 
-                    if (parcel['description'] != "") {
-                        let description = document.createElement("h4");
-                        description.className = "parcelText";
-                        description.innerText = '"' + parcel['description'] + '"';
-                        parcel['div'].appendChild(description);
-                        parcel['div'].appendChild(document.createElement("br"));
-                    }
+                    let dimensions = document.createElement("label");
+                    dimensions.className = "parcelText";
+                    dimensions.innerText = parcel['dimensions'] + "cm";
+                    parcel['div'].appendChild(dimensions);
 
-                    let street = document.createElement("h4");
+
+                    let street = document.createElement("label");
                     street.className = "parcelText";
                     street.innerText = parcel['street'];
                     parcel['div'].appendChild(street);
-                    parcel['div'].appendChild(document.createElement("br"));
 
-                    let city = document.createElement("h4");
+                    let city = document.createElement("label");
                     city.className = "parcelText";
                     city.innerText = parcel['postalCode'] + " " + parcel['city'];
                     parcel['div'].appendChild(city);
-                    parcel['div'].appendChild(document.createElement("br"));
 
-                    let country = document.createElement("h4");
+                    let country = document.createElement("label");
                     country.className = "parcelText";
                     country.innerText = parcel['country'];
                     parcel['div'].appendChild(country);
@@ -308,20 +308,21 @@ window.onload = function init() {
 
         editMenu.appendChild(formRow);
 
-        //Description
+        //Dimensions
         formRow = document.createElement("div");
         formRow.className = "formRow";
 
         label = document.createElement("label")
-        label.innerText = "Description";
+        label.innerText = "Dimensions";
         label.className = "formFieldName";
         formRow.appendChild(label);
 
         input = document.createElement("input");
         input.className = "formFieldInput";
         input.type = "text";
-        input.id = "editDescriptionInput";
-        input.value = parcel['description'];
+        input.id = "editDimensionsInput";
+        input.placeholder = "e.g. 30x40x50 (in cm)";
+        input.value = parcel['dimensions'];
         formRow.appendChild(input);
 
         editMenu.appendChild(formRow);
@@ -352,7 +353,7 @@ window.onload = function init() {
         editedParcel['city'] = document.getElementById("editCityInput").value;
         editedParcel['street'] = document.getElementById("editStreetInput").value;
         editedParcel['postalCode'] = document.getElementById("editPostalCodeInput").value;
-        editedParcel['description'] = document.getElementById("editDescriptionInput").value;
+        editedParcel['dimensions'] = document.getElementById("editDimensionsInput").value;
 
         if (!Validate(editedParcel, true)) return;
 

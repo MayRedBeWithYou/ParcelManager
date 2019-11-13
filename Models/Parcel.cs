@@ -13,16 +13,13 @@ namespace ParcelManager.Models
 
         public double Latitude { get; set; }
 
-        public string Description { get; set; }
+        public string Dimensions { get; set; }
 
         public string Country { get; set; }
 
         public string City { get; set; }
 
         public string Street { get; set; }
-
-        public string ApartmentNumber { get; set; } //Todo
-        //nie uwzględniamy tego w dodawaniu?? więc albo poprawić w formularzu i js albo wyrzucić
 
         public string PostalCode { get; set; }
 
