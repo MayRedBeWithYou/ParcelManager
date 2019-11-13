@@ -50,6 +50,10 @@ window.onload = function init() {
         parcel['postalCode'] = document.getElementById("addPostalCodeInput").value;
         parcel['description'] = document.getElementById("addDescriptionInput").value;
 
+        if (Validate(parcel) == false) {
+            return;
+        }
+
         var uri = "https://nominatim.openstreetmap.org/?format=json&addressdetails=1&limit=1&q=" + parcel['street']
             + "," + parcel['postalCode'] + "," + parcel['city'] + "," + parcel['country'];
         uri = encodeURI(uri);
@@ -57,6 +61,9 @@ window.onload = function init() {
         fetch(uri, { method: 'POST' }).then(resp => {
             resp.json().then(info => {
                 if (info.length == 0) {
+                    errorLabel.className = "errorActive";
+                    errorLabel.textContent = "Can't find provided address";
+                    RefreshForm(false);
                     return;
                 }
                 let address = info[0]['address'];
@@ -84,6 +91,48 @@ window.onload = function init() {
                 }).then(UpdateParcelList);
             });
         });
+    }
+
+    function Validate(parcel, isEdit) {
+        let errorLabel = document.getElementById("errorLabel");
+        if (isEdit) {
+            errorLabel = document.getElementById("editErrorLabel");
+        }
+
+        let error = false;
+        if (parcel['country'] == "") {
+            errorLabel.textContent = "Please enter valid country";
+            error = true;
+        }
+        else if (parcel['city'] == "") {
+            errorLabel.textContent = "Please enter valid city";
+            error = true;
+        }
+        else if (parcel['street'] == "") {
+            errorLabel.textContent = "Please enter valid street";
+            error = true;
+        }
+        else if (parcel['postalcode'] == "") {
+            errorLabel.textContent = "Please enter valid postalcode";
+            error = true;
+        }
+        if (error) {
+            errorLabel.className = "errorActive";
+            RefreshForm(isEdit);
+            return false;
+        }
+
+        errorLabel.className = "errorInactive";
+        RefreshForm(isEdit);
+        return true;
+    }
+
+    function RefreshForm(isEdit) {
+        let content = addParcelToggle.nextElementSibling;
+        if (isEdit) {
+            content = parcelList;
+        }
+        content.style.maxHeight = content.scrollHeight + "px";
     }
 
     async function UpdateParcelList() {
@@ -181,6 +230,11 @@ window.onload = function init() {
         editMenu.id = "editMenu";
         parcel['div'].parentNode.appendChild(editMenu);
         parcel['div'].style.display = "none";
+
+        let errorLabel = document.createElement("label");
+        errorLabel.id = "editErrorLabel";
+        errorLabel.className = "errorInactive";
+        editMenu.appendChild(errorLabel);
 
         //Country
         let formRow = document.createElement("div");
@@ -291,6 +345,7 @@ window.onload = function init() {
 
     async function EditParcel(parcel) {
         let editedParcel = {};
+        let errorLabel = document.getElementById("editErrorLabel");
         editedParcel['id'] = parcel['id'];
         editedParcel['sendDate'] = parcel['sendDate'];
         editedParcel['country'] = document.getElementById("editCountryInput").value;
@@ -299,6 +354,8 @@ window.onload = function init() {
         editedParcel['postalCode'] = document.getElementById("editPostalCodeInput").value;
         editedParcel['description'] = document.getElementById("editDescriptionInput").value;
 
+        if (!Validate(editedParcel, true)) return;
+
         var uri = "https://nominatim.openstreetmap.org/?format=json&addressdetails=1&limit=1&q=" + editedParcel['street']
             + "," + editedParcel['postalCode'] + "," + editedParcel['city'] + "," + editedParcel['country'];
         uri = encodeURI(uri);
@@ -306,6 +363,9 @@ window.onload = function init() {
         fetch(uri, { method: 'POST' }).then(resp => {
             resp.json().then(info => {
                 if (info.length == 0) {
+                    errorLabel.className = "errorActive";
+                    errorLabel.textContent = "Can't find provided address";
+                    RefreshForm(true);
                     return;
                 }
                 let address = info[0]['address'];

@@ -169,6 +169,21 @@
     background-color: firebrick;
 }
 
+
 #editMenu {
     max-height: none;
+}
+
+.errorActive {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    display: block;
+    font-weight: bold;
+    color: red;
+    margin: 10px;
+    text-align: center;
+}
+
+.errorInactive {
+    display: none;
 }
