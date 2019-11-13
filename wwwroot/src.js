@@ -208,6 +208,13 @@ window.onload = function init() {
                     parcel['div'].appendChild(country);
 
                     parcelList.appendChild(parcel['div'].parentNode);
+
+                    parcelPopup = document.createElement("div");
+                    parcelPopup.appendChild(dimensions.cloneNode(true));
+                    parcelPopup.appendChild(street.cloneNode(true));
+                    parcelPopup.appendChild(city.cloneNode(true));
+                    parcelPopup.appendChild(country.cloneNode(true));
+                    parcel['marker'].bindPopup(parcelPopup);
                 }
                 RefreshList();
             });
@@ -225,9 +232,10 @@ window.onload = function init() {
 
     function StartEdit(parcel) {
         ClearEdit();
-        let editMenu = document.createElement("div");
+        let editMenu = document.createElement("form");
         editMenu.className = "content";
         editMenu.id = "editMenu";
+        editMenu.action = "javascript::void(0)"
         parcel['div'].parentNode.appendChild(editMenu);
         parcel['div'].style.display = "none";
 

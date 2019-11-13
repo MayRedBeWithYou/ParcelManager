@@ -18,7 +18,7 @@
     <div id="controlPanel">
         <div class="menu">
             <button id="addNewParcelToggle" class="collapsible">Add new parcel</button>
-            <div class="content">
+            <form class="content" action="javascript::void(0)">
                 <label class="errorInactive" id="errorLabel">Błąd</label>
                 <div class="formRow">
                     <label class="formFieldName">Country</label>
@@ -41,7 +41,7 @@
                     <input class="formFieldInput" type="text" id="addDimensionsInput" placeholder="e.g. 30x40x50 (in cm)"/>
                 </div>
                 <button class="okButton" id="addNewParcelButton">Add parcel</button>
-            </div>
+            </form>
         </div>
         <div class="menu">
             <button class="collapsible" id="allParcelsToggle">All parcels</button>
