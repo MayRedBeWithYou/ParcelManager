@@ -50,6 +50,11 @@ namespace ParcelManager.Controllers
             {
                 return BadRequest(ModelState);
             }
+            if (parcel.City == "" || parcel.Country == "" || parcel.Dimensions == "" || parcel.Street == ""
+                || parcel.Latitude == 0 || parcel.Longitude == 0 || parcel.PostalCode == "")
+            {
+                return BadRequest(ModelState);
+            }
 
             if (id != parcel.Id)
             {
@@ -85,6 +90,11 @@ namespace ParcelManager.Controllers
                 return BadRequest(ModelState);
             }
 
+            if(parcel.City == "" || parcel.Country == "" || parcel.Dimensions == "" || parcel.Street == "" 
+                || parcel.Latitude ==0 || parcel.Longitude == 0 || parcel.PostalCode == "")
+            {
+                return BadRequest(ModelState);
+            }
             parcel.SendDate = DateTime.Now;
             context.Parcels.Add(parcel);
 

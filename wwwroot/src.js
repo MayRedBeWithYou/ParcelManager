@@ -42,7 +42,6 @@ window.onload = function init() {
     UpdateParcelList();
 
     async function addNewParcel() {
-        console.log("Adding new parcel.");
         let parcel = {};
         parcel['country'] = document.getElementById("addCountryInput").value;
         parcel['city'] = document.getElementById("addCityInput").value;
@@ -81,7 +80,6 @@ window.onload = function init() {
                 parcel['postalCode'] = address['postcode'];
                 parcel['latitude'] = info[0]['lat'];
                 parcel['longitude'] = info[0]['lon'];
-                console.log(info);
                 fetch('api/Parcels', {
                     method: 'POST',
                     body: JSON.stringify(parcel),
@@ -154,7 +152,6 @@ window.onload = function init() {
                     parcelList.removeChild(parcel['div'].parentNode);
                 }
 
-                console.log(data);
                 parcels = data;
                 allParcelsBtn.innerText = "All parcels (" + parcels.length + " available)";
 
@@ -235,7 +232,7 @@ window.onload = function init() {
         let editMenu = document.createElement("form");
         editMenu.className = "content";
         editMenu.id = "editMenu";
-        editMenu.action = "javascript::void(0)"
+        editMenu.action = "javascript:void(0)"
         parcel['div'].parentNode.appendChild(editMenu);
         parcel['div'].style.display = "none";
 
@@ -392,7 +389,6 @@ window.onload = function init() {
                 editedParcel['postalCode'] = address['postcode'];
                 editedParcel['latitude'] = info[0]['lat'];
                 editedParcel['longitude'] = info[0]['lon'];
-                console.log(info);
                 fetch('api/Parcels/' + parcel['id'], {
                     method: 'PUT',
                     body: JSON.stringify(editedParcel),
