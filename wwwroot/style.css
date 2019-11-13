@@ -7,6 +7,10 @@
     margin-right: 300px;
 }
 
+.hidden {
+    display: none;
+}
+
 #controlPanel {
     display: inline-block;
     float: right;

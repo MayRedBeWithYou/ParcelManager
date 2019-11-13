@@ -222,7 +222,7 @@ window.onload = function init() {
     function ClearEdit() {
         let currentEditMenu = document.getElementById("editMenu");
         if (currentEditMenu) {
-            currentEditMenu.parentNode.firstChild.style.display = "block";
+            currentEditMenu.parentNode.firstChild.className = "parcelInfo";
             currentEditMenu.parentNode.removeChild(currentEditMenu);
         }
     }
@@ -233,8 +233,9 @@ window.onload = function init() {
         editMenu.className = "content";
         editMenu.id = "editMenu";
         editMenu.action = "javascript:void(0)"
+        editMenu.name = "editForm";
         parcel['div'].parentNode.appendChild(editMenu);
-        parcel['div'].style.display = "none";
+        parcel['div'].className = "parcelInfo hidden";
 
         let errorLabel = document.createElement("label");
         errorLabel.id = "editErrorLabel";
@@ -344,6 +345,7 @@ window.onload = function init() {
         button.innerText = "Cancel";
         button.className = "deleteButton";
         button.addEventListener("click", ClearEdit);
+        button.type = "reset";
         editMenu.appendChild(button);
 
         RefreshList();
