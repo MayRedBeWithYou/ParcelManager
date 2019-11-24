@@ -14,6 +14,10 @@ window.onload = function init() {
             UpdateParcelList();
         }
     });
+    var polyline = {};
+    var points = [];
+    var calculateRouteButton = document.getElementById('calculateRouteButton');
+    calculateRouteButton.addEventListener("click", calculateRoute);
 
     var map = L.map('map').setView([52.25, 21], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -47,7 +51,7 @@ window.onload = function init() {
         parcel['city'] = document.getElementById("addCityInput").value;
         parcel['street'] = document.getElementById("addStreetInput").value;
         parcel['postalCode'] = document.getElementById("addPostalCodeInput").value;
-        parcel['dimensions'] = document.getElementById("addDimensionsInput").value;
+        parcel['weight'] = document.getElementById("addWeightInput").value;
 
         if (Validate(parcel, false) == false) {
             return;
@@ -96,7 +100,6 @@ window.onload = function init() {
         if (isEdit) {
             errorLabel = document.getElementById("editErrorLabel");
         }
-        let reg = new RegExp('^[1-9]+[0-9]*x[1-9]+[0-9]*x[1-9]+[0-9]*$');
         let error = false;
         if (parcel['country'] == "") {
             errorLabel.textContent = "Please enter valid country";
@@ -114,8 +117,8 @@ window.onload = function init() {
             errorLabel.textContent = "Please enter valid postal code";
             error = true;
         }
-        else if (!reg.test(parcel['dimensions'])) {
-            errorLabel.textContent = "Please enter valid dimensions";
+        else if (parcel['weight'] == 0) {
+            errorLabel.textContent = "Please enter valid weight";
             error = true;
         }
         if (error) {
@@ -157,7 +160,7 @@ window.onload = function init() {
 
                 for (i = 0; i < parcels.length; i++) {
                     let parcel = parcels[i];
-                    parcel['marker'] = L.marker([parcel['latitude'], parcel['longitude']], { title: parcel['dimensions'] });
+                    parcel['marker'] = L.marker([parcel['latitude'], parcel['longitude']], { title: parcel['weight'] });
                     parcel['marker'].addTo(map);
                     let parcelDiv = document.createElement("div");
                     parcelDiv.className = "parcel";
@@ -183,10 +186,10 @@ window.onload = function init() {
                         StartEdit(parcel);
                     });
 
-                    let dimensions = document.createElement("label");
-                    dimensions.className = "parcelText";
-                    dimensions.innerText = parcel['dimensions'] + "cm";
-                    parcel['div'].appendChild(dimensions);
+                    let weight = document.createElement("label");
+                    weight.className = "parcelText";
+                    weight.innerText = parcel['weight'] + "kg";
+                    parcel['div'].appendChild(weight);
 
 
                     let street = document.createElement("label");
@@ -207,7 +210,7 @@ window.onload = function init() {
                     parcelList.appendChild(parcel['div'].parentNode);
 
                     parcelPopup = document.createElement("div");
-                    parcelPopup.appendChild(dimensions.cloneNode(true));
+                    parcelPopup.appendChild(weight.cloneNode(true));
                     parcelPopup.appendChild(street.cloneNode(true));
                     parcelPopup.appendChild(city.cloneNode(true));
                     parcelPopup.appendChild(country.cloneNode(true));
@@ -314,21 +317,21 @@ window.onload = function init() {
 
         editMenu.appendChild(formRow);
 
-        //Dimensions
+        //Weight
         formRow = document.createElement("div");
         formRow.className = "formRow";
 
         label = document.createElement("label")
-        label.innerText = "Dimensions";
+        label.innerText = "Weight";
         label.className = "formFieldName";
         formRow.appendChild(label);
 
         input = document.createElement("input");
         input.className = "formFieldInput";
-        input.type = "text";
-        input.id = "editDimensionsInput";
-        input.placeholder = "e.g. 30x40x50 (in cm)";
-        input.value = parcel['dimensions'];
+        input.type = "number";
+        input.id = "editWeightInput";
+        input.step = "0.01";
+        input.value = parcel['weight'];
         formRow.appendChild(input);
 
         editMenu.appendChild(formRow);
@@ -360,7 +363,7 @@ window.onload = function init() {
         editedParcel['city'] = document.getElementById("editCityInput").value;
         editedParcel['street'] = document.getElementById("editStreetInput").value;
         editedParcel['postalCode'] = document.getElementById("editPostalCodeInput").value;
-        editedParcel['dimensions'] = document.getElementById("editDimensionsInput").value;
+        editedParcel['weight'] = document.getElementById("editWeightInput").value;
 
         if (!Validate(editedParcel, true)) return;
 
@@ -398,6 +401,8 @@ window.onload = function init() {
                         'Content-Type': 'application/json'
                     })
                 }).then(UpdateParcelList);
+
+                map.removeLayer(polyline);
             });
         });
     }
@@ -412,6 +417,8 @@ window.onload = function init() {
             }),
         }).then(resp => {
             UpdateParcelList();
+
+            map.removeLayer(polyline);
         });
     }
 
@@ -419,5 +426,30 @@ window.onload = function init() {
         if (parcelList.style.maxHeight) {
             parcelList.style.maxHeight = parcelList.scrollHeight + "px";
         }
+    }
+
+    function calculateRoute() {
+
+        var waypoints = [];
+        for (i = 0; i < parcels.length; i++) {
+            waypoints.push(L.latLng(parcels[i]['latitude'], parcels[i]['longitude']));
+        }
+
+        var route = L.Routing.control({
+            waypoints: waypoints,
+            show: false,
+            routeWhileDragging: false,
+        }).on('routesfound', function (e) {
+            var coords = e.routes[0].coordinates;
+            console.log(coords);
+            points = [];
+            for (i = 0; i < coords.length; i++) {
+                points.push(coords[i]);
+            }
+            map.removeLayer(polyline);
+            polyline = L.polyline(points, { color: 'red' });
+            polyline.addTo(map);
+        });
+        route.route();
     }
 }

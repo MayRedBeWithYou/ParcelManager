@@ -13,7 +13,7 @@ namespace ParcelManager.Models
 
         public double Latitude { get; set; }
 
-        public string Dimensions { get; set; }
+        public double Weight { get; set; }
 
         public string Country { get; set; }
 

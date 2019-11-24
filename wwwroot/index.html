@@ -8,9 +8,11 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
           integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
           crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
             integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
             crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <script src="src.js" type="text/javascript"></script>
     <title></title>
 </head>
@@ -37,8 +39,8 @@
                     <input class="formFieldInput" type="text" id="addPostalCodeInput" />
                 </div>
                 <div class="formRow">
-                    <label class="formFieldName">Dimensions</label>
-                    <input class="formFieldInput" type="text" id="addDimensionsInput" placeholder="e.g. 30x40x50 (in cm)"/>
+                    <label class="formFieldName">Weight</label>
+                    <input class="formFieldInput" type="number" id="addWeightInput" step="0.01"/>
                 </div>
                 <button class="okButton" id="addNewParcelButton">Add parcel</button>
             </form>
@@ -47,6 +49,16 @@
             <button class="collapsible" id="allParcelsToggle">All parcels</button>
             <div id="parcelList" class="content">
             </div>
+        </div>
+        <div class="menu">
+            <button class="collapsible" id="routeButton">Calculating route</button>
+            <form class="content" action="javascript:void(0)">
+                <div class="formRow">
+                    <label class="formFieldName">Capacity (kg)</label>
+                    <input class="formFieldInput" type="number" id="capacityInput" />
+                </div>
+                <button class="okButton" id="calculateRouteButton">Calculate</button>
+            </form>
         </div>
     </div>
     <div id="map"></div>
