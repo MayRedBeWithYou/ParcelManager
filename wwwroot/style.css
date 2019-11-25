@@ -205,8 +205,17 @@
     background-color: rgba(0,0,0, 0.9); 
     overflow-x: hidden;
 }
+
 .overlayActive {
-    display: block;
+    display: block; 
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    background-color: rgba(0,0,0, 0.9);
+    overflow-x: hidden;
 }
 #loading {
     background: url('spinner.gif') no-repeat center center;

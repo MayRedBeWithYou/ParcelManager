@@ -22,9 +22,6 @@ window.onload = function init() {
     var calculateRouteButton = document.getElementById('calculateRouteButton');
     calculateRouteButton.addEventListener("click", calculateRoute);
 
-    var checkButton = document.getElementById('checkButton');
-    checkButton.addEventListener("click", checkCalc);
-
     var drawButton = document.getElementById('drawButton');
     drawButton.addEventListener("click", calculateRoute2);
 
@@ -451,18 +448,25 @@ window.onload = function init() {
     }
 
     function calculateRoute() {
-        ShowLoading();
         let cap = document.getElementById("capacityInput").value;
-        fetch('api/Parcels/calc?capacity=' + cap + 'lat=' + postOffice.getLatLng()['lat']
-            + '&lon=' + postOffice.getLatLng()['lat'], {
-            method: 'POST',
-        }).then(resp => {
-            checkCalc();
-        });
+        if (postOffice && cap) {
+            ShowLoading();            
+            fetch('api/Parcels/calc?capacity=' + cap + '&lat=' + postOffice.getLatLng()['lat']
+                + '&lon=' + postOffice.getLatLng()['lat'], {
+                method: 'POST',
+            }).then(resp => {
+                checkCalc();
+            });
+            //fetch('api/Parcels/calc', {
+            //    method: 'POST',
+            //}).then(resp => {
+            //    checkCalc();
+            //});
+        }
     }
 
     function ShowLoading() {
-        overlay.className = "overlay overlayActive";
+        overlay.className = "overlayActive";
     }
 
     function HideLoading() {
@@ -499,12 +503,13 @@ window.onload = function init() {
             method: 'GET'
         }).then(resp => {
             console.log(resp.status);
-            if (resp.status == 201) {
+            if (resp.status == 200) {
+                calculateRoute2();
                 HideLoading();
-            }
-            else {
-                setTimeout(200, checkCalc);
+            } if (resp.status == 204) {
+                setTimeout(checkCalc, 500);
             }
         });
+
     }
 }

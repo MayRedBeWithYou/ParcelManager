@@ -106,10 +106,10 @@ namespace ParcelManager.Controllers
         }
 
         [HttpPost("calc")]
-        public async Task<StatusCodeResult> CalculateRoute()
+        public async Task<StatusCodeResult> CalculateRoute([FromQuery] int capacity, [FromQuery] double lat, [FromQuery] double lan)
         {
             Debug.WriteLine(CalcTask.Counter);
-            if (CalcTask.Counter == 0) CalcTask.Counter = 3;
+            if (CalcTask.Counter <= 0) CalcTask.Counter = 3;
             Debug.WriteLine(CalcTask.Counter);
             return StatusCode(202);
         }
@@ -125,7 +125,7 @@ namespace ParcelManager.Controllers
             }
             else
             {
-                return StatusCode(418);
+                return StatusCode(204);
             }
         }
 
