@@ -40,7 +40,7 @@
                 </div>
                 <div class="formRow">
                     <label class="formFieldName">Weight</label>
-                    <input class="formFieldInput" type="number" id="addWeightInput" step="0.01"/>
+                    <input class="formFieldInput" type="number" id="addWeightInput" step="0.01" />
                 </div>
                 <button class="okButton" id="addNewParcelButton">Add parcel</button>
             </form>
@@ -58,9 +58,14 @@
                     <input class="formFieldInput" type="number" id="capacityInput" />
                 </div>
                 <button class="okButton" id="calculateRouteButton">Calculate</button>
+                <button class="okButton" id="drawButton">Draw (ordered)</button>
+                <button class="okButton" id="checkButton">Check</button>
             </form>
         </div>
     </div>
     <div id="map"></div>
+    <div id="overlay" class="overlay">
+        <div id="loading"></div>
+    </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -104,6 +105,30 @@ namespace ParcelManager.Controllers
             return CreatedAtAction("GetParcel", new { id = parcel.Id }, parcel);
         }
 
+        [HttpPost("calc")]
+        public async Task<StatusCodeResult> CalculateRoute()
+        {
+            Debug.WriteLine(CalcTask.Counter);
+            if (CalcTask.Counter == 0) CalcTask.Counter = 3;
+            Debug.WriteLine(CalcTask.Counter);
+            return StatusCode(202);
+        }
+
+        [HttpGet("calc")]
+        public async Task<StatusCodeResult> CheckCalculation()
+        {
+            Debug.WriteLine(CalcTask.Counter);
+            CalcTask.Counter--;
+            if (CalcTask.Counter == 0)
+            {
+                return StatusCode(200);
+            }
+            else
+            {
+                return StatusCode(418);
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteParcel([FromRoute] int id)
         {
@@ -128,5 +153,8 @@ namespace ParcelManager.Controllers
         {
             return context.Parcels.Any(e => e.Id == id);
         }
+
+
+
     }
 }

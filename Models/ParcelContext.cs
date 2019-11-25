@@ -11,5 +11,7 @@ namespace ParcelManager.Models
         public ParcelContext(DbContextOptions<ParcelContext> options) : base(options) { }
 
         public DbSet<Parcel> Parcels { get; set; }
+
+        public int Counter = 0;
     }
 }

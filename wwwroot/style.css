@@ -5,6 +5,7 @@
 #map {
     height: 90vh;
     margin-right: 300px;
+    z-index: 1;
 }
 
 .hidden {
@@ -191,4 +192,26 @@
 
 .errorInactive {
     display: none;
+}
+
+.overlay {
+    display: none;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    background-color: rgba(0,0,0, 0.9); 
+    overflow-x: hidden;
+}
+.overlayActive {
+    display: block;
+}
+#loading {
+    background: url('spinner.gif') no-repeat center center;
+    text-align: center;
+    margin-top: 33vh;
+    height: 300px;
+    width: auto;
 }

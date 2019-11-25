@@ -14,10 +14,19 @@ window.onload = function init() {
             UpdateParcelList();
         }
     });
+
+    var overlay = document.getElementById('overlay');
+
     var polyline = {};
     var points = [];
     var calculateRouteButton = document.getElementById('calculateRouteButton');
     calculateRouteButton.addEventListener("click", calculateRoute);
+
+    var checkButton = document.getElementById('checkButton');
+    checkButton.addEventListener("click", checkCalc);
+
+    var drawButton = document.getElementById('drawButton');
+    drawButton.addEventListener("click", calculateRoute2);
 
     var map = L.map('map').setView([52.25, 21], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -26,6 +35,19 @@ window.onload = function init() {
         id: 'mapbox.streets',
         accessToken: 'pk.eyJ1IjoiYW5uYTMiLCJhIjoiY2sybjkzMzZqMG55YjNqbjVmdWU0ZmJ3dyJ9.-ohocMLisbsVBa8ozJV_Bw'
     }).addTo(map);
+
+    var postOffice;
+
+    map.on("click", function (e) {
+        if (postOffice) map.removeLayer(postOffice);
+        postOffice = L.marker([e.latlng.lat, e.latlng.lng]);
+
+        let popup = document.createElement("div");
+        popup.innerText = "Post office";
+        postOffice.bindPopup(popup);
+        postOffice.addTo(map);
+        map.removeLayer(polyline);
+    });
 
     var cl = document.getElementsByClassName("collapsible");
     for (i = 0; i < cl.length; i++) {
@@ -429,11 +451,31 @@ window.onload = function init() {
     }
 
     function calculateRoute() {
+        ShowLoading();
+        let cap = document.getElementById("capacityInput").value;
+        fetch('api/Parcels/calc?capacity=' + cap + 'lat=' + postOffice.getLatLng()['lat']
+            + '&lon=' + postOffice.getLatLng()['lat'], {
+            method: 'POST',
+        }).then(resp => {
+            checkCalc();
+        });
+    }
 
+    function ShowLoading() {
+        overlay.className = "overlay overlayActive";
+    }
+
+    function HideLoading() {
+        overlay.className = "overlay";
+    }
+
+    function calculateRoute2() {
         var waypoints = [];
+        waypoints.push(postOffice.getLatLng());
         for (i = 0; i < parcels.length; i++) {
             waypoints.push(L.latLng(parcels[i]['latitude'], parcels[i]['longitude']));
         }
+        waypoints.push(postOffice.getLatLng());
 
         var route = L.Routing.control({
             waypoints: waypoints,
@@ -451,5 +493,18 @@ window.onload = function init() {
             polyline.addTo(map);
         });
         route.route();
+    }
+    function checkCalc() {
+        fetch('/api/Parcels/calc', {
+            method: 'GET'
+        }).then(resp => {
+            console.log(resp.status);
+            if (resp.status == 201) {
+                HideLoading();
+            }
+            else {
+                setTimeout(200, checkCalc);
+            }
+        });
     }
 }
